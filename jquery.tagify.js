@@ -3,7 +3,7 @@
  * Copyright 2011 Apps In Your Pants Corporation
  * http://github.com/appsinyourpants/jquery-plugins
  *
- * Version 1.0   -   Updated: Jan. 21, 2010
+ * Version 1.0.1   -   Updated: Jan. 29, 2011
  *
  * This jQuery plug-in is lcensed under a Creative Commons Attribution 3.0 Unported License. http://creativecommons.org/licenses/by/3.0/
  */
