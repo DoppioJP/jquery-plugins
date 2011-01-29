@@ -1,9 +1,16 @@
  /*
  * Tagify
  * Copyright 2011 Apps In Your Pants Corporation
- * http://github.com/appsinyourpants/jquery-plugins
+ * http://github.com/appsinyourpants/jquery-plugins - Version 1.0 Jan. 21, 2010
  *
- * Version 1.0.1   -   Updated: Jan. 29, 2011
+ * Version 1.0.1   -   Updated: Jan. 29, 2011 by JjP
+ * - added all tags functionality
+ *
+ * Version 1.0.2   -   Updated: Jan. 29, 2011 by JjP
+ * - added all tags button with additional allTagsButtonClass option to define additional css class for it
+ * - changed function name from showAllData to showAllTags
+ * - added function toggleAllTags to show and hide the tags list
+ * 
  *
  * This jQuery plug-in is lcensed under a Creative Commons Attribution 3.0 Unported License. http://creativecommons.org/licenses/by/3.0/
  */
@@ -22,7 +29,8 @@
 			allowNew: true,
 			newMatch: function(val) { return val.match(/^(\w+\-)*\w+$/gi); },
 			containerType: 'div',
-			sizeResults: null
+			sizeResults: null,
+			allTagsButtonClass: 'text_shadow'
 		};
 		var opts = $.extend(defaults, arguments[0] || {});
 
@@ -44,6 +52,9 @@
 
 			var container = $('<' + opts.containerType + ' class="tagify-container" />');
 			input.after(container);
+			
+			// Button to show all tags available
+			var show_all_button = $('<a name="all_tags" class="tagify-all-button">+</a>')
 
 			// Hide the original input
 			input.hide();
@@ -53,7 +64,7 @@
 			// Create tag display
 			var tags = $('<ul id="tags-' + id + '" class="tagify-tags"></ul>');
 			container.append(tags);
-
+			
 			// Create a helper input that will be used only for entering tags
 			var tag_input = $('<input type="text" class="tagify-prompt" autocomplete="off" />');
 			tag_input.blur(function() { hideResults(); container.removeClass('focused'); });
@@ -65,7 +76,7 @@
 
 
 			// Create tag results list
-			var results = $('<ul id="results-' + id + '" class="tagify-results"></ul>')
+			var results = $('<ul id="results-' + id + '" class="tagify-results ' + opts.allTagsButtonClass + '"></ul>')
 				.css({
 					position: 'absolute',
 					zIndex: 10000
@@ -122,7 +133,7 @@
 						return defaultKeyHandler();
 					case 32:
 						// Show all available tags
-						showAllData();
+						showAllTags();
 						return;
 					default:
 						defaultKeyHandler();
@@ -131,6 +142,14 @@
 
 				evt.preventDefault();
 			});
+
+			// Add the all button
+			container.append(show_all_button);
+			show_all_button.click(function() { 
+				toggleAllTags();
+				return false;
+			})
+
 
 			function defaultKeyHandler() {
 				if (keyTimeout) clearTimeout(keyTimeout);
@@ -157,8 +176,15 @@
 					processData(opts.data, tag_input.val());
 				}
 			}
+			
+			function toggleAllTags() {
+				if (resultsVisible)
+					hideResults();
+				else 
+					showAllTags();
+			}
 
-			function showAllData() {
+			function showAllTags() {
 				
 				// Count items to show
 				var showCount = 0;
@@ -262,6 +288,7 @@
 				}
 				if (cur.length > 0)
 					addTag(cur.data('value'));
+
 				tag_input.val('');
 				hideResults();
 				tag_input.focus();
