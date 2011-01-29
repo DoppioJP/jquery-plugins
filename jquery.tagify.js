@@ -163,10 +163,13 @@
 				// Count items to show
 				var showCount = 0;
 				
+				// Empty results first
+				results.empty();
+				
 				// Merge data collection with staticdata to work on both together
 				var merged = $.merge($.merge([], opts.data), opts.staticdata);
 				
-				// Iterate through merged collection
+				// Iterate through merged collection 
 				for (var ix = 0; ix < merged.length; ix++) {
 					
 					// Take the item value and trim it
