@@ -120,6 +120,10 @@
 							break;
 						}
 						return defaultKeyHandler();
+					case 32:
+						// Show all available tags
+						showAllData();
+						return;
 					default:
 						defaultKeyHandler();
 						return;
@@ -152,6 +156,44 @@
 				else {
 					processData(opts.data, tag_input.val());
 				}
+			}
+
+			function showAllData() {
+				
+				// Count items to show
+				var showCount = 0;
+				
+				// Merge data collection with staticdata to work on both together
+				var merged = $.merge($.merge([], opts.data), opts.staticdata);
+				
+				// Iterate through merged collection
+				for (var ix = 0; ix < merged.length; ix++) {
+					
+					// Take the item value and trim it
+					var value = merged[ix];
+					value = $.trim(value);
+					
+					// Create a tag on comma
+					if (input.val().indexOf(value + ',') > -1)
+						continue;
+
+					var result_item = $('<li>' + value + '</li>');
+					result_item.data('value', value);
+					results.append(result_item);
+
+					result_item.click(function() {
+						addTag($(this).data('value'));
+					});
+
+					showCount++;
+				}
+				
+				// Don't show the results collection container if there are no items
+				if (showCount > 0)
+					showResults();
+				else
+					hideResults();
+				
 			}
 
 			function shouldProcessQuery(q) {
